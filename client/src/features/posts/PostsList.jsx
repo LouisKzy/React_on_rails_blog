@@ -1,7 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { API_URL } from "../../constants";
+import {
+  deletePost as deletePostService,
+  fetchAllPosts,
+} from "../../services/postService";
 function PostsList() {
   // gestion de l'etat
   const [posts, setPosts] = useState([]);
@@ -13,34 +16,23 @@ function PostsList() {
   useEffect(() => {
     async function fetchPosts() {
       try {
-        const response = await fetch(API_URL);
-        if (response.ok) {
-          const json = await response.json();
-          setPosts(json);
-        } else {
-          throw response;
-        }
+        const data = await fetchAllPosts();
+        setPosts(data);
+        setLoading(false);
       } catch (error) {
         setError("An error as occured. Awkward.");
-        console.log("Error: " + error);
-      } finally {
         setLoading(false);
+        console.log("Error: " + error);
       }
     }
     fetchPosts();
   }, []);
   const deletePost = async (id) => {
     try {
-      const response = await fetch(`${API_URL}/${id}`, {
-        method: "DELETE",
-      });
-      if (response.ok) {
-        setPosts(posts.filter((post) => post.id !== id));
-      } else {
-        throw response;
-      }
+      await deletePostService(id);
+      setPosts(posts.filter((post) => post.id !== id));
     } catch (error) {
-      console.log("Error: " + error);
+      console.log("failed to delete post: " + error);
     }
   };
   // render
