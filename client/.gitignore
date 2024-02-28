@@ -26,3 +26,5 @@ dist-ssr
 # We will not push env files
 .env
 .env.development
+
+coverage
