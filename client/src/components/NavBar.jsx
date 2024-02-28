@@ -1,6 +1,5 @@
-import { Link } from "react-router-dom";
 // Link posts list (root path) | Link to create new post (posts/new path)
-
+import { Link } from "react-router-dom";
 function NavBar() {
   return (
     <nav>
