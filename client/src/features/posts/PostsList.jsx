@@ -1,10 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  deletePost as deletePostService,
-  fetchAllPosts,
-} from "../../services/postService";
+import { deletePost, fetchAllPosts } from "../../services/postService";
 function PostsList() {
   // gestion de l'etat
   const [posts, setPosts] = useState([]);
@@ -27,9 +24,9 @@ function PostsList() {
     }
     fetchPosts();
   }, []);
-  const deletePost = async (id) => {
+  const deletePostHandler = async (id) => {
     try {
-      await deletePostService(id);
+      await deletePost(id);
       setPosts(posts.filter((post) => post.id !== id));
     } catch (error) {
       console.log("failed to delete post: " + error);
@@ -48,7 +45,7 @@ function PostsList() {
           <div className="post-links">
             <Link to={`/posts/${post.id}/edit`}>Edit</Link>
             {" | "}
-            <button onClick={() => deletePost(post.id)}>Delete</button>
+            <button onClick={() => deletePostHandler(post.id)}>Delete</button>
           </div>
         </div>
       ))}
